@@ -11,7 +11,7 @@ dataFlow('packedData');
 // Reactive functions.
 dataFlow('data', unpackData, 'packedData');
 
-// TODO filter by selected types, origin, destination
+// TODO filter by zoom interval, selected types, origin, destination
 dataFlow('dataFiltered', d => d, 'data');
 
 const aggregateBy = column => {
@@ -20,7 +20,7 @@ const aggregateBy = column => {
     .key(d => d.year)
     .rollup(values => sum(values, d => d.value));
   return data => compute.entries(data);
-}
+};
 
 dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
 dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');

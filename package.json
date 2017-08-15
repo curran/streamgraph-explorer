@@ -20,9 +20,10 @@
     "webpack": "^3.5.4"
   },
   "dependencies": {
-    "d3-dsv": "^1.0.5",
+    "chiasm-layout": "^0.3.0",
     "d3-array": "^1.2.0",
     "d3-collection": "^1.0.4",
+    "d3-dsv": "^1.0.5",
     "d3-format": "^1.2.0",
     "d3-request": "^1.0.5",
     "reactive-model": "^0.13.0"
