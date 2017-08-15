@@ -7,10 +7,12 @@ const dataFlow = ReactiveModel();
 
 // Declare reactive properties used as inputs.
 dataFlow
-  ('packedData')
-  ('containerBox')
-  ('srcStreamBox')
-  ('destStreamBox');
+  ('packedData') // The data loaded directly from JSON.
+  ('containerBox') // Dimensions of the container DIV.
+  ('srcStreamBox') // Position and dimensions of the source StreamGraph.
+  ('destStreamBox') // Position and dimensions of the destination StreamGraph.
+  ('src', null) // The currently selected source (null means no selection).
+  ('dest', null); // The currently selected destination (null means no selection).
 
 // Reactive functions.
 dataFlow('data', unpackData, 'packedData');
@@ -22,7 +24,14 @@ dataFlow('allYears', packedData => {
 }, 'packedData');
 
 // TODO filter by selected types, selected origin, and selected destination
-dataFlow('dataFiltered', d => d, 'data');
+dataFlow('dataFiltered', (data, src) => {
+  if (src !== null) {
+    return data.filter(d => {
+      return d.src === src;
+    });
+  }
+  return data;
+}, 'data, src');
 
 // Compute aggregated data by source and destination (after filtering).
 dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
@@ -37,6 +46,6 @@ dataFlow('destKeys', keys, 'dataByDest');
 dataFlow('srcStreamData', interpolate, 'allYears, dataBySrc');
 dataFlow('destStreamData', interpolate, 'allYears, dataByDest');
 
-dataFlow(d => console.log(d), 'srcKeys');
+dataFlow(d => console.log(d), 'src');
 
 export default dataFlow;

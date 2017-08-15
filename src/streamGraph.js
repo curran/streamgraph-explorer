@@ -16,7 +16,8 @@ const streamArea = area()
 
 const margin = { top: 0, bottom: 30, left: 0, right: 30 };
 
-const StreamGraph = (selection, box, data, keys) => {
+const StreamGraph = (selection, props) => {
+  const { box, data, keys, onAreaClick } = props;
   const innerWidth = box.width - margin.right - margin.left;
   const innerHeight = box.height - margin.top - margin.bottom;
 
@@ -41,7 +42,8 @@ const StreamGraph = (selection, box, data, keys) => {
     .merge(paths)
       .attr('fill', d => colorScale(d.index))
       .attr('stroke', d => colorScale(d.index))
-      .attr('d', streamArea);
+      .attr('d', streamArea)
+      .on('click', d => onAreaClick(d.key));
 
   paths.select('title')
     .merge(pathsEnter.append('title'))
