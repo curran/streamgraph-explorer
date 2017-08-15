@@ -14,8 +14,21 @@ layout(container, dataFlow);
 
 // Scaffold the SVG DOM tree within the container.
 const svg = select(container).append('svg');
-const srcStreamsG = svg.append('g');
-const destStreamsG = svg.append('g');
+const srcStreamG = svg.append('g');
+const destStreamG = svg.append('g');
+
+const StreamGraph = () => {
+  console.log("render StreamGraph");
+};
 
 dataFlow
-  (d => console.log(d), 'srcStreamsBox')
+  ((box, data) => {
+    srcStreamG
+      .attr('transform', `translate(${box.x},${box.y})`)
+      .call(StreamGraph, { box, data });
+  }, 'srcStreamBox, dataBySrc')
+  ((box, data) => {
+    destStreamG
+      .attr('transform', `translate(${box.x},${box.y})`)
+      .call(StreamGraph, { box, data });
+  }, 'destStreamBox, dataBySrc')

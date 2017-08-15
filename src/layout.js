@@ -3,7 +3,7 @@ import computeLayout from 'chiasm-layout/src/computeLayout';
 // The way that the components are to be arranged.
 const arrangement = {
   orientation: 'vertical',
-  children: [ 'srcStreams', 'destStreams' ]
+  children: [ 'srcStream', 'destStream' ]
 };
 
 // Set up the layout that responds to resize.
@@ -20,7 +20,7 @@ const layout = (container, dataFlow) => {
     const computedLayout = computeLayout(arrangement, {}, containerBox());
 
     // Pass computed boxes into the data flow graph.
-    // e.g. 'srcStreamsBox', 'destStreamsBox', ...
+    // e.g. 'srcStreamBox', 'destStreamBox', ...
     Object.keys(computedLayout).forEach(key => {
       dataFlow[key + 'Box'](computedLayout[key]);
     });

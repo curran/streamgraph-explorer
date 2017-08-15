@@ -5,11 +5,11 @@ import { sum } from 'd3-array';
 
 const dataFlow = ReactiveModel();
 
-// Declare reactive properties.
+// Declare reactive properties used as inputs.
 dataFlow
   ('packedData')
-  ('srcStreamsBox')
-  ('destStreamsBox');
+  ('srcStreamBox')
+  ('destStreamBox');
 
 // Reactive functions.
 dataFlow('data', unpackData, 'packedData');
