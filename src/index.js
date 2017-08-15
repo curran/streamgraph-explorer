@@ -1,6 +1,7 @@
 import { json } from 'd3-request';
-json('data/time_series.json', data => {
-  console.log(data);
+import dataFlow from './dataFlow';
+json('data/time_series.json', packedData => {
+  dataFlow.packedData(packedData);
 });
 //var fs = require('fs'),
 //    d3 = Object.assign(
