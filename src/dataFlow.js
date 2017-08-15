@@ -8,6 +8,7 @@ const dataFlow = ReactiveModel();
 // Declare reactive properties used as inputs.
 dataFlow
   ('packedData')
+  ('containerBox')
   ('srcStreamBox')
   ('destStreamBox');
 

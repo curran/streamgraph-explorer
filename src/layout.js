@@ -17,7 +17,10 @@ const layout = (container, dataFlow) => {
 
   // Compute the layout on resize.
   const resize = () => {
-    const computedLayout = computeLayout(arrangement, {}, containerBox());
+    const box = containerBox();
+    const computedLayout = computeLayout(arrangement, {}, box);
+
+    dataFlow.containerBox(box);
 
     // Pass computed boxes into the data flow graph.
     // e.g. 'srcStreamBox', 'destStreamBox', ...
