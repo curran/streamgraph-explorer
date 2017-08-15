@@ -36,6 +36,8 @@ const StreamGraph = (selection, props) => {
 
   colorScale.domain(range(keys.length));
 
+  const singleLayer = stacked.length === 1;
+
   const paths = selection.selectAll('path').data(stacked);
   const pathsEnter = paths.enter().append('path');
   pathsEnter
@@ -43,7 +45,8 @@ const StreamGraph = (selection, props) => {
       .attr('fill', d => colorScale(d.index))
       .attr('stroke', d => colorScale(d.index))
       .attr('d', streamArea)
-      .on('click', d => onAreaClick(d.key));
+      .on('click', d => onAreaClick(singleLayer ? null : d.key));
+  paths.exit().remove();
 
   paths.select('title')
     .merge(pathsEnter.append('title'))

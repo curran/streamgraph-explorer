@@ -24,14 +24,10 @@ dataFlow('allYears', packedData => {
 }, 'packedData');
 
 // TODO filter by selected types, selected origin, and selected destination
-dataFlow('dataFiltered', (data, src) => {
-  if (src !== null) {
-    return data.filter(d => {
-      return d.src === src;
-    });
-  }
-  return data;
-}, 'data, src');
+dataFlow('dataFiltered', (data, src, dest) => {
+  data = src ? data.filter(d => d.src === src) : data;
+  return dest ? data.filter(d => d.dest === dest) : data;
+}, 'data, src, dest');
 
 // Compute aggregated data by source and destination (after filtering).
 dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
