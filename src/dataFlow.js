@@ -14,17 +14,16 @@ dataFlow('data', unpackData, 'packedData');
 // TODO filter by selected types, origin, destination
 dataFlow('dataFiltered', d => d, 'data');
 
-dataFlow('dataBySrc', dataFiltered => {
-  return nest()
-    .key(function (d) { return d.src; })
-    .key(function (d) { return d.year; })
-    .rollup(function(values) {
-      return sum(values, function(d) {
-        return d.Value;
-      })
-    })
-    .entries(dataFiltered);
-}, 'dataFiltered');
+const aggregateBy = column => {
+  const compute = nest()
+    .key(d => d[column])
+    .key(d => d.year)
+    .rollup(values => sum(values, d => d.value));
+  return data => compute.entries(data);
+}
+
+dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
+dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
 
 dataFlow(data => console.log(data[0]), 'dataBySrc');
 
