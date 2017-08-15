@@ -4,8 +4,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>StreamGraph Explorer</title>
+
+    <style>
+      /* Make the container fill the page using CSS. */
+      #container {
+        position: fixed;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+      }
+    </style>
   </head>
   <body>
+
+    <!-- Everything will be injected into this div. -->
+    <div id="container"></div>
+
+    <!-- Load the script bundle built by WebPack. -->
     <script src="build/streamgraphExplorer.js"></script>
+
   </body>
 </html>
