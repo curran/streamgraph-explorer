@@ -21,14 +21,11 @@ const StreamGraph = () => {
   console.log("render StreamGraph");
 };
 
-dataFlow
-  ((box, data) => {
-    srcStreamG
-      .attr('transform', `translate(${box.x},${box.y})`)
-      .call(StreamGraph, { box, data });
-  }, 'srcStreamBox, dataBySrc')
-  ((box, data) => {
-    destStreamG
-      .attr('transform', `translate(${box.x},${box.y})`)
-      .call(StreamGraph, { box, data });
-  }, 'destStreamBox, dataBySrc')
+
+// Render the source and destination StreamGraphs.
+const renderStreamGraph = g => (box, data) => {
+  g.attr('transform', `translate(${box.x},${box.y})`)
+    .call(StreamGraph, { box, data });
+};
+dataFlow(renderStreamGraph(srcStreamG), 'srcStreamBox, dataBySrc');
+dataFlow(renderStreamGraph(destStreamG), 'destStreamBox, dataByDest');
