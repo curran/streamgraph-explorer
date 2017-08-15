@@ -32,6 +32,7 @@ const interpolate = (years, nestedData) => {
     // Assign values to the new row object for each key.
     // Value for `key` here will be country name.
     nestedData.forEach(d => {
+      // TODO optimize: if d.key in keys...
       row[d.key] = interpolateValue(d.values, date);
     });
 

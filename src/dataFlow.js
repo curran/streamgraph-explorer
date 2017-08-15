@@ -28,10 +28,15 @@ dataFlow('dataFiltered', d => d, 'data');
 dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
 dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
 
+// TODO filter keys to show top N by sum.
+const keys = nestedData => nestedData.map(d => d.key);
+dataFlow('srcKeys', keys, 'dataBySrc');
+dataFlow('destKeys', keys, 'dataByDest');
+
 // Interpolate the aggregated data so there are values for all years.
 dataFlow('srcStreamData', interpolate, 'allYears, dataBySrc');
-//dataFlow('destStreamData', interpolateAllYears, 'dataByDest');
+dataFlow('destStreamData', interpolate, 'allYears, dataByDest');
 
-dataFlow(d => console.log(d), 'srcStreamData');
+dataFlow(d => console.log(d), 'srcKeys');
 
 export default dataFlow;

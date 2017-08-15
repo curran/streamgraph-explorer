@@ -8,7 +8,7 @@ import StreamGraph from './streamGraph';
 json('data/time_series.json', dataFlow.packedData);
 
 // Select the div that will contain everything.
-const container= document.getElementById('container');
+const container = document.getElementById('container');
 
 // Set up the layout that responds to resize.
 layout(container, dataFlow);
@@ -24,9 +24,9 @@ dataFlow(box => {
 }, 'containerBox');
 
 // Render the source and destination StreamGraphs.
-const renderStreamGraph = g => (box, data) => {
+const renderStreamGraph = g => (box, data, keys) => {
   g.attr('transform', `translate(${box.x},${box.y})`)
-    .call(StreamGraph, { box, data });
+    .call(StreamGraph, box, data, keys);
 };
-dataFlow(renderStreamGraph(srcStreamG), 'srcStreamBox, dataBySrc');
-dataFlow(renderStreamGraph(destStreamG), 'destStreamBox, dataByDest');
+dataFlow(renderStreamGraph(srcStreamG), 'srcStreamBox, srcStreamData, srcKeys');
+dataFlow(renderStreamGraph(destStreamG), 'destStreamBox, destStreamData, destKeys');
