@@ -18,11 +18,9 @@ const svg = select(container).append('svg');
 const srcStreamG = svg.append('g');
 const destStreamG = svg.append('g');
 
-// Set the size of the SVG element on resize
+// Set the size of the SVG element on resize.
 dataFlow(box => {
-  svg
-      .attr('width', box.width)
-      .attr('height', box.height);
+  svg.attr('width', box.width).attr('height', box.height);
 }, 'containerBox');
 
 // Render the source and destination StreamGraphs.
