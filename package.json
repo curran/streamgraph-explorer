@@ -1,0 +1,29 @@
+{
+  "name": "streamgraph-explorer",
+  "version": "0.0.1",
+  "description": "An interactive visualization system for exploring flow timeseries data.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/curran/streamgraph-explorer.git"
+  },
+  "author": "Curran Kelleher",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/curran/streamgraph-explorer/issues"
+  },
+  "homepage": "https://github.com/curran/streamgraph-explorer#readme",
+  "devDependencies": {
+    "d3-dsv": "^1.0.5",
+    "webpack": "^3.5.4"
+  },
+  "dependencies": {
+    "d3-array": "^1.2.0",
+    "d3-collection": "^1.0.4",
+    "d3-format": "^1.2.0",
+    "d3-request": "^1.0.5"
+  }
+}
