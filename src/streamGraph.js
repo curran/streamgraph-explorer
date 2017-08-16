@@ -1,6 +1,7 @@
 import { area, curveBasis, stack, stackOffsetWiggle, stackOrderInsideOut } from 'd3-shape';
 import { scaleTime, scaleLinear, scaleOrdinal, schemeCategory10 } from 'd3-scale';
 import { min, max, extent, range } from 'd3-array';
+import { areaLabel } from 'd3-area-label';
 
 const xValue = d => d.date;
 const xScale = scaleTime();
@@ -14,7 +15,10 @@ const streamArea = area()
   .y1(d => yScale(d[1]))
   .curve(curveBasis);
 
-const margin = { top: 0, bottom: 30, left: 0, right: 30 };
+const streamLabel = areaLabel(streamArea)
+  .interpolateResolution(1000);
+
+const margin = { top: 0, bottom: 0, left: 0, right: 0 };
 
 const StreamGraph = (selection, props) => {
   const { box, data, keys, onAreaClick } = props;
@@ -36,21 +40,34 @@ const StreamGraph = (selection, props) => {
 
   colorScale.domain(range(keys.length));
 
-  const singleLayer = stacked.length === 1;
-
+  // Render the areas for the StreamGraph layers.
   const paths = selection.selectAll('path').data(stacked);
-  const pathsEnter = paths.enter().append('path');
+  const pathsEnter = paths
+    .enter().append('path')
+      .attr('class', 'streamgraph-area');
   pathsEnter
     .merge(paths)
       .attr('fill', d => colorScale(d.index))
       .attr('stroke', d => colorScale(d.index))
       .attr('d', streamArea)
-      .on('click', d => onAreaClick(singleLayer ? null : d.key));
+      .on('click', d => onAreaClick(stacked.length === 1 ? null : d.key));
   paths.exit().remove();
 
+  // Add <title> tags to each area for simple tooltips that show names on hover.
   paths.select('title')
     .merge(pathsEnter.append('title'))
       .text(d => d.key);
+
+  // Add the labels on top of the areas.
+  const labels = selection.selectAll('text').data(stacked);
+  const labelsEnter = labels
+    .enter().append('text')
+      .attr('class', 'streamgraph-area-label');
+  labelsEnter
+    .merge(labels)
+      .text(d => d.key)
+      .attr('transform', streamLabel)
+  labels.exit().remove();
 };
 
 export default StreamGraph;
