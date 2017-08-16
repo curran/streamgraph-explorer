@@ -1,3 +1,4 @@
+import { max, descending } from 'd3-array';
 import ReactiveModel from 'reactive-model';
 import unpackData from './unpackData';
 import aggregateBy from './aggregateBy';
@@ -12,7 +13,9 @@ dataFlow
   ('srcStreamBox') // Position and dimensions of the source StreamGraph.
   ('destStreamBox') // Position and dimensions of the destination StreamGraph.
   ('src', null) // The currently selected source (null means no selection).
-  ('dest', null); // The currently selected destination (null means no selection).
+  ('dest', null) // The currently selected destination (null means no selection).
+  ('maxStreamLayers', 50) // The maximum number of layers in a StreamGraph.
+;
 
 // Reactive functions.
 dataFlow('data', unpackData, 'packedData');
@@ -34,9 +37,18 @@ dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
 dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
 
 // TODO filter keys to show top N by sum.
-const keys = nestedData => nestedData.map(d => d.key);
-dataFlow('srcKeys', keys, 'dataBySrc');
-dataFlow('destKeys', keys, 'dataByDest');
+const keys = (nestedData, maxStreamLayers) => {
+  return nestedData
+    .map(d => ({
+      key: d.key,
+      max: max(d.values, d => d.value)
+    }))
+    .sort((a, b) => descending(a.max, b.max))
+    .slice(0, maxStreamLayers)
+    .map(d => d.key);
+};
+dataFlow('srcKeys', keys, 'dataBySrc, maxStreamLayers');
+dataFlow('destKeys', keys, 'dataByDest, maxStreamLayers');
 
 // Interpolate the aggregated data so there are values for all years.
 dataFlow('srcStreamData', interpolate, 'allYears, dataBySrc');
