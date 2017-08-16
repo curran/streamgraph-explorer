@@ -21,7 +21,14 @@ const streamLabel = areaLabel(streamArea)
 const margin = { top: 0, bottom: 0, left: 0, right: 0 };
 
 const StreamGraph = (selection, props) => {
-  const { box, data, keys, onAreaClick } = props;
+  const {
+    box,
+    data,
+    keys,
+    onAreaClick,
+    title
+  } = props;
+
   const innerWidth = box.width - margin.right - margin.left;
   const innerHeight = box.height - margin.top - margin.bottom;
 
@@ -41,7 +48,8 @@ const StreamGraph = (selection, props) => {
   colorScale.domain(range(keys.length));
 
   // Render the areas for the StreamGraph layers.
-  const paths = selection.selectAll('path').data(stacked);
+  const paths = selection
+    .selectAll('.streamgraph-area').data(stacked);
   const pathsEnter = paths
     .enter().append('path')
       .attr('class', 'streamgraph-area');
@@ -59,7 +67,8 @@ const StreamGraph = (selection, props) => {
       .text(d => d.key);
 
   // Add the labels on top of the areas.
-  const labels = selection.selectAll('text').data(stacked);
+  const labels = selection
+    .selectAll('.streamgraph-area-label').data(stacked);
   const labelsEnter = labels
     .enter().append('text')
       .attr('class', 'streamgraph-area-label');
@@ -68,6 +77,18 @@ const StreamGraph = (selection, props) => {
       .text(d => d.key)
       .attr('transform', streamLabel)
   labels.exit().remove();
+
+  // Add the title.
+  const titleText = selection
+    .selectAll('.streamgraph-title').data([1]);
+  titleText
+    .enter().append('text')
+      .attr('class', 'streamgraph-title')
+    .merge(titleText)
+      .attr('x', innerWidth * 0.02)
+      .attr('y', innerHeight * 0.3)
+      .text(title + (stacked.length > 1 ? 's' : ''));
+  console.log(title + (stacked.length > 1 ? 's' : ''));
 };
 
 export default StreamGraph;
