@@ -3,6 +3,7 @@ import unpackData from './unpackData';
 import aggregateBy from './aggregateBy';
 import interpolate from './interpolate';
 import keys from './keys';
+import hashRouting from './hashRouting';
 
 const dataFlow = ReactiveModel();
 
@@ -44,22 +45,9 @@ dataFlow('destKeys', keys, 'dataByDest, maxStreamLayers');
 dataFlow('srcStreamData', interpolate, 'allYears, dataBySrc');
 dataFlow('destStreamData', interpolate, 'allYears, dataByDest');
 
-// Update the URL hash based on src and dest.
-dataFlow((src, dest) => {
-  const params = {src, dest};
-  const hash = JSON.stringify(params);
-  window.location.hash = hash;
-}, 'src, dest');
-
-// On page load, pass the state encoded in the URL
-// into the data flow graph.
-const hash = window.location.hash.substr(1);
-if (hash.length > 0) {
-  const params = JSON.parse(hash);
-  Object.keys(params).forEach(key => {
-    dataFlow[key](params[key]);
-  });
-}
+// Initialize the routing system that uses URL hash
+// to store pieces of the state.
+hashRouting(dataFlow, ['src', 'dest']);
 
 //dataFlow(d => console.log(d), 'src');
 
