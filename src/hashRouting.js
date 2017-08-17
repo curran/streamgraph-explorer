@@ -1,8 +1,11 @@
+import queryString from 'query-string';
+
 const hashRouting = (dataFlow, stateParams) => {
+
   // Update the URL hash based on src and dest.
   dataFlow((src, dest) => {
     const params = {src, dest};
-    const hash = JSON.stringify(params);
+    const hash = queryString.stringify(params);
     window.location.hash = hash;
   }, stateParams);
 
@@ -10,7 +13,7 @@ const hashRouting = (dataFlow, stateParams) => {
   // into the data flow graph.
   const hash = window.location.hash.substr(1);
   if (hash.length > 0) {
-    const params = JSON.parse(hash);
+    const params = queryString.parse(hash);
     Object.keys(params).forEach(key => {
       dataFlow[key](params[key]);
     });
