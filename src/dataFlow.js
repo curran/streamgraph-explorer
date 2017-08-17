@@ -54,6 +54,6 @@ dataFlow('destKeys', keys, 'dataByDest, maxStreamLayers');
 dataFlow('srcStreamData', interpolate, 'allYears, dataBySrc');
 dataFlow('destStreamData', interpolate, 'allYears, dataByDest');
 
-dataFlow(d => console.log(d), 'src');
+//dataFlow(d => console.log(d), 'src');
 
 export default dataFlow;

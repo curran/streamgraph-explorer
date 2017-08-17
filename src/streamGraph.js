@@ -88,7 +88,6 @@ const StreamGraph = (selection, props) => {
       .attr('x', innerWidth * 0.02)
       .attr('y', innerHeight * 0.3)
       .text(title + (stacked.length > 1 ? 's' : ''));
-  console.log(title + (stacked.length > 1 ? 's' : ''));
 };
 
 export default StreamGraph;
