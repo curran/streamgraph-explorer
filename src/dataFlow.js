@@ -51,6 +51,16 @@ dataFlow((src, dest) => {
   window.location.hash = hash;
 }, 'src, dest');
 
+// On page load, pass the state encoded in the URL
+// into the data flow graph.
+const hash = window.location.hash.substr(1);
+if (hash.length > 0) {
+  const params = JSON.parse(hash);
+  Object.keys(params).forEach(key => {
+    dataFlow[key](params[key]);
+  });
+}
+
 //dataFlow(d => console.log(d), 'src');
 
 export default dataFlow;
