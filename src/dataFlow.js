@@ -1,8 +1,8 @@
-import { max, descending } from 'd3-array';
 import ReactiveModel from 'reactive-model';
 import unpackData from './unpackData';
 import aggregateBy from './aggregateBy';
 import interpolate from './interpolate';
+import keys from './keys';
 
 const dataFlow = ReactiveModel();
 
@@ -36,17 +36,7 @@ dataFlow('dataFiltered', (data, src, dest) => {
 dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
 dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
 
-// TODO filter keys to show top N by sum.
-const keys = (nestedData, maxStreamLayers) => {
-  return nestedData
-    .map(d => ({
-      key: d.key,
-      max: max(d.values, d => d.value)
-    }))
-    .sort((a, b) => descending(a.max, b.max))
-    .slice(0, maxStreamLayers)
-    .map(d => d.key);
-};
+// Compute keys, top N (maxStreamLayers) sorted by max value.
 dataFlow('srcKeys', keys, 'dataBySrc, maxStreamLayers');
 dataFlow('destKeys', keys, 'dataByDest, maxStreamLayers');
 
