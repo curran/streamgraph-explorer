@@ -44,6 +44,13 @@ dataFlow('destKeys', keys, 'dataByDest, maxStreamLayers');
 dataFlow('srcStreamData', interpolate, 'allYears, dataBySrc');
 dataFlow('destStreamData', interpolate, 'allYears, dataByDest');
 
+// Update the URL hash based on src and dest.
+dataFlow((src, dest) => {
+  const params = {src, dest};
+  const hash = JSON.stringify(params);
+  window.location.hash = hash;
+}, 'src, dest');
+
 //dataFlow(d => console.log(d), 'src');
 
 export default dataFlow;
