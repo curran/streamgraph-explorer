@@ -58,6 +58,4 @@ dataFlow('destStreamData', interpolate, 'allYears, dataByDest');
 // to store pieces of the state.
 hashRouting(dataFlow, ['src', 'dest']);
 
-//dataFlow(d => console.log(d), 'src');
-
 export default dataFlow;
