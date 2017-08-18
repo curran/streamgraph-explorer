@@ -18,7 +18,8 @@ const TimePanel = g => (box, margin, timeExtent) => {
   const translateY = box.y + box.height / 2;
   g
       .attr('transform', `translate(${translateX},${translateY})`)
-      .call(xAxis);
+      .call(xAxis)
+    .select('.domain').remove();
 };
 
 export default TimePanel;
