@@ -3,6 +3,7 @@ import { select } from 'd3-selection';
 import dataFlow from './dataFlow';
 import layout from './layout';
 import StreamGraph from './streamGraph';
+import TimePanel from './timePanel';
 
 // Load the data into the data flow graph.
 json('data/time_series.json', dataFlow.packedData);
@@ -34,14 +35,4 @@ const destStream = stream('Destination', destStreamG, dataFlow.dest);
 dataFlow(srcStream, 'srcStreamBox, srcStreamData, srcKeys');
 dataFlow(destStream, 'destStreamBox, destStreamData, destKeys');
 
-const timePanel = box => {
-  const rect = timePanelG.selectAll('rect').data([1]);
-  const rectEnter = rect.enter().append('rect')
-      .attr('fill', 'gray');
-  rect.merge(rectEnter)
-      .attr('x', box.x)
-      .attr('y', box.y)
-      .attr('width', box.width)
-      .attr('height', box.height);
-};
-dataFlow(timePanel, 'timePanelBox');
+dataFlow(TimePanel(timePanelG), 'timePanelBox');
