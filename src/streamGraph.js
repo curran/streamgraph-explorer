@@ -18,15 +18,14 @@ const streamArea = area()
 const streamLabel = areaLabel(streamArea)
   .interpolateResolution(1000);
 
-const margin = { top: 0, bottom: 0, left: 0, right: 0 };
-
 const StreamGraph = (selection, props) => {
   const {
     box,
     data,
     keys,
     onAreaClick,
-    title
+    title,
+    margin
   } = props;
 
   const innerWidth = box.width - margin.right - margin.left;

@@ -26,13 +26,13 @@ dataFlow(box => {
 }, 'containerBox');
 
 // Render the source and destination StreamGraphs.
-const stream = (title, g, onAreaClick) => (box, data, keys) => {
+const stream = (title, g, onAreaClick) => (box, data, keys, margin) => {
   g.attr('transform', `translate(${box.x},${box.y})`)
-    .call(StreamGraph, { box, data, keys, onAreaClick, title });
+    .call(StreamGraph, { box, data, keys, onAreaClick, title, margin });
 };
 const srcStream = stream('Origin', srcStreamG, dataFlow.src);
 const destStream = stream('Destination', destStreamG, dataFlow.dest);
-dataFlow(srcStream, 'srcStreamBox, srcStreamData, srcKeys');
-dataFlow(destStream, 'destStreamBox, destStreamData, destKeys');
+dataFlow(srcStream, 'srcStreamBox, srcStreamData, srcKeys, streamsMargin');
+dataFlow(destStream, 'destStreamBox, destStreamData, destKeys, streamsMargin');
 
-dataFlow(TimePanel(timePanelG), 'timePanelBox');
+dataFlow(TimePanel(timePanelG), 'timePanelBox, streamsMargin');

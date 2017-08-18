@@ -18,6 +18,9 @@ dataFlow
   ('dest', null) // The currently selected destination (null means no selection).
   ('maxStreamLayers', 50) // The maximum number of layers in a StreamGraph.
   ('minStreamMax', 100) // Layers with maxima below this are excluded.
+  ('streamsMargin', { // The margin of the StreamGraphs and TimePanel.
+    top: 0, bottom: 0, left: 20, right: 20
+  })
 ;
 
 // Reactive functions.
