@@ -35,8 +35,14 @@ const destStream = stream('Destination', destStreamG, dataFlow.dest);
 dataFlow(srcStream, 'srcStreamBox, srcStreamData, srcKeys, streamsMargin');
 dataFlow(destStream, 'destStreamBox, destStreamData, destKeys, streamsMargin');
 
+dataFlow('timeTicksYExtent', (srcStreamBox, destStreamBox) => ({
+    y1: srcStreamBox.y,
+    y2: destStreamBox.y + destStreamBox.height
+}), 'srcStreamBox, destStreamBox');
+
 dataFlow(TimePanel(timePanelG), [
   'timePanelBox',
   'streamsMargin',
-  'timeExtent'
+  'timeExtent',
+  'timeTicksYExtent'
 ]);
