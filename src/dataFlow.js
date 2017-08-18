@@ -16,6 +16,7 @@ dataFlow
   ('src', null) // The currently selected source (null means no selection).
   ('dest', null) // The currently selected destination (null means no selection).
   ('maxStreamLayers', 50) // The maximum number of layers in a StreamGraph.
+  ('minStreamMax', 100) // Layers with maxima below this are excluded.
 ;
 
 // Reactive functions.
@@ -38,8 +39,8 @@ dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
 dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
 
 // Compute keys, top N (maxStreamLayers) sorted by max value.
-dataFlow('srcKeys', keys, 'dataBySrc, maxStreamLayers');
-dataFlow('destKeys', keys, 'dataByDest, maxStreamLayers');
+dataFlow('srcKeys', keys, 'dataBySrc, maxStreamLayers, minStreamMax');
+dataFlow('destKeys', keys, 'dataByDest, maxStreamLayers, minStreamMax');
 
 // Interpolate the aggregated data so there are values for all years.
 dataFlow('srcStreamData', interpolate, 'allYears, dataBySrc');
