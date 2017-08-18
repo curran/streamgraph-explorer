@@ -17,6 +17,7 @@ const TimePanel = g => (box, margin, timeExtent, ticksYExtent) => {
   const translateX = box.x + margin.left;
   const translateY = box.y + box.height / 2;
   g
+      .attr('class', 'time-panel-axis')
       .attr('transform', `translate(${translateX},${translateY})`)
       .call(xAxis);
   g.select('.domain').remove();
