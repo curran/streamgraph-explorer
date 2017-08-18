@@ -18,15 +18,14 @@ const streamArea = area()
 const streamLabel = areaLabel(streamArea)
   .interpolateResolution(1000);
 
-const margin = { top: 0, bottom: 0, left: 0, right: 0 };
-
 const StreamGraph = (selection, props) => {
   const {
     box,
     data,
     keys,
     onAreaClick,
-    title
+    title,
+    margin
   } = props;
 
   const innerWidth = box.width - margin.right - margin.left;
@@ -46,6 +45,11 @@ const StreamGraph = (selection, props) => {
     .range([innerHeight, 0]);
 
   colorScale.domain(range(keys.length));
+
+  const translateX = box.x + margin.left;
+  const translateY = box.y + margin.top;
+  selection
+      .attr('transform', `translate(${translateX},${translateY})`)
 
   // Render the areas for the StreamGraph layers.
   const paths = selection

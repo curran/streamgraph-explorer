@@ -1,3 +1,4 @@
+import { extent } from 'd3-array';
 import ReactiveModel from 'reactive-model';
 import unpackData from './unpackData';
 import aggregateBy from './aggregateBy';
@@ -13,10 +14,14 @@ dataFlow
   ('containerBox') // Dimensions of the container DIV.
   ('srcStreamBox') // Position and dimensions of the source StreamGraph.
   ('destStreamBox') // Position and dimensions of the destination StreamGraph.
+  ('timePanelBox') // Position and dimensions of the time panel.
   ('src', null) // The currently selected source (null means no selection).
   ('dest', null) // The currently selected destination (null means no selection).
   ('maxStreamLayers', 50) // The maximum number of layers in a StreamGraph.
   ('minStreamMax', 100) // Layers with maxima below this are excluded.
+  ('streamsMargin', { // The margin of the StreamGraphs and TimePanel.
+    top: 0, bottom: 0, left: 20, right: 20
+  })
 ;
 
 // Reactive functions.
@@ -27,6 +32,9 @@ dataFlow('allYears', packedData => {
   return Object.keys(packedData.nested)
     .map(yearStr => new Date(yearStr));
 }, 'packedData');
+
+// Compute the extent of time.
+dataFlow('timeExtent', allYears => extent(allYears), 'allYears');
 
 // TODO filter by selected types, selected origin, and selected destination
 dataFlow('dataFiltered', (data, src, dest) => {
@@ -49,7 +57,5 @@ dataFlow('destStreamData', interpolate, 'allYears, dataByDest');
 // Initialize the routing system that uses URL hash
 // to store pieces of the state.
 hashRouting(dataFlow, ['src', 'dest']);
-
-//dataFlow(d => console.log(d), 'src');
 
 export default dataFlow;
