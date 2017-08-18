@@ -12,7 +12,11 @@ const TimePanel = g => (box, margin, timeExtent) => {
     .domain(timeExtent)
     .range([0, innerWidth]);
   
-  g.call(xAxis);
+  const translateX = box.x + margin.left;
+  const translateY = box.y + margin.top;
+  g
+      .attr('transform', `translate(${translateX},${translateY})`)
+      .call(xAxis);
 };
 
 export default TimePanel;

@@ -46,6 +46,11 @@ const StreamGraph = (selection, props) => {
 
   colorScale.domain(range(keys.length));
 
+  const translateX = box.x + margin.left;
+  const translateY = box.y + margin.top;
+  selection
+      .attr('transform', `translate(${translateX},${translateY})`)
+
   // Render the areas for the StreamGraph layers.
   const paths = selection
     .selectAll('.streamgraph-area').data(stacked);
