@@ -16,9 +16,9 @@ layout(container, dataFlow);
 
 // Scaffold the SVG DOM tree within the container.
 const svg = select(container).append('svg');
+const timePanelG = svg.append('g');
 const srcStreamG = svg.append('g');
 const destStreamG = svg.append('g');
-const timePanelG = svg.append('g');
 
 // Set the size of the SVG element on resize.
 dataFlow(box => {
