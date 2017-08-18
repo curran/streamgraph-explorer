@@ -1,3 +1,4 @@
+import { extent } from 'd3-array';
 import ReactiveModel from 'reactive-model';
 import unpackData from './unpackData';
 import aggregateBy from './aggregateBy';
@@ -31,6 +32,9 @@ dataFlow('allYears', packedData => {
   return Object.keys(packedData.nested)
     .map(yearStr => new Date(yearStr));
 }, 'packedData');
+
+// Compute the extent of time.
+dataFlow('timeExtent', allYears => extent(allYears), 'allYears');
 
 // TODO filter by selected types, selected origin, and selected destination
 dataFlow('dataFiltered', (data, src, dest) => {
