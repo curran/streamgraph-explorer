@@ -13,6 +13,7 @@ dataFlow
   ('containerBox') // Dimensions of the container DIV.
   ('srcStreamBox') // Position and dimensions of the source StreamGraph.
   ('destStreamBox') // Position and dimensions of the destination StreamGraph.
+  ('timePanelBox') // Position and dimensions of the time panel.
   ('src', null) // The currently selected source (null means no selection).
   ('dest', null) // The currently selected destination (null means no selection).
   ('maxStreamLayers', 50) // The maximum number of layers in a StreamGraph.

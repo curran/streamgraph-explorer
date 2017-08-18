@@ -17,6 +17,7 @@ layout(container, dataFlow);
 const svg = select(container).append('svg');
 const srcStreamG = svg.append('g');
 const destStreamG = svg.append('g');
+const timePanelG = svg.append('g');
 
 // Set the size of the SVG element on resize.
 dataFlow(box => {
@@ -32,3 +33,15 @@ const srcStream = stream('Origin', srcStreamG, dataFlow.src);
 const destStream = stream('Destination', destStreamG, dataFlow.dest);
 dataFlow(srcStream, 'srcStreamBox, srcStreamData, srcKeys');
 dataFlow(destStream, 'destStreamBox, destStreamData, destKeys');
+
+const timePanel = box => {
+  const rect = timePanelG.selectAll('rect').data([1]);
+  const rectEnter = rect.enter().append('rect')
+      .attr('fill', 'gray');
+  rect.merge(rectEnter)
+      .attr('x', box.x)
+      .attr('y', box.y)
+      .attr('width', box.width)
+      .attr('height', box.height);
+};
+dataFlow(timePanel, 'timePanelBox');
