@@ -22,11 +22,12 @@ const ContextStream = (selection, props) => {
   const {
     box: { width, height },
     data,
-    onBrush
+    onBrush,
+    timeExtent
   } = props;
 
   xScale
-    .domain(extent(data, xValue))
+    .domain(timeExtent)
     .range([0, width]);
 
   yScale

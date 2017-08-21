@@ -65,14 +65,15 @@ dataFlow(TimePanel(timePanelG), [
 ]);
 
 // Render the context panel
-dataFlow((box, data) => {
+dataFlow((box, data, timeExtent) => {
   contextStreamG
     .attr('transform', `translate(${box.x},${box.y})`)
     .call(ContextStream, {
       box,
       data,
+      timeExtent,
       onBrush: (extent) => {
         dataFlow.zoomExtent(extent);
       }
     });
-}, 'contextStreamBox, dataByYear');
+}, 'contextStreamBox, dataByYear, timeExtent');
