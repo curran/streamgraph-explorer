@@ -26,7 +26,8 @@ const StreamGraph = (selection, props) => {
     title,
     margin,
     showLabels,
-    colorScale
+    colorScale,
+    zoomExtent
   } = props;
 
   const innerWidth = box.width - margin.right - margin.left;
@@ -38,7 +39,7 @@ const StreamGraph = (selection, props) => {
   }
 
   xScale
-    .domain(extent(data, xValue))
+    .domain(zoomExtent)
     .range([0, innerWidth]);
 
   yScale

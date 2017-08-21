@@ -44,7 +44,7 @@ dataFlow(box => {
 
 // Render the source and destination StreamGraphs.
 const stream = (title, g, onAreaClick) => {
-  return (box, data, keys, margin, showLabels, colorScale) => {
+  return (box, data, keys, margin, showLabels, colorScale, zoomExtent) => {
     g.attr('transform', `translate(${box.x},${box.y})`)
       .call(StreamGraph, {
         box,
@@ -54,7 +54,8 @@ const stream = (title, g, onAreaClick) => {
         title,
         margin,
         showLabels,
-        colorScale
+        colorScale,
+        zoomExtent
       });
   };
 };
@@ -65,7 +66,8 @@ dataFlow(srcStream, [
   'srcKeys',
   'streamsMargin',
   'showStreamLabels',
-  'colorScale'
+  'colorScale',
+  'zoomExtent'
 ]);
 
 const destStream = stream('Destination', destStreamG, dataFlow.dest);
@@ -75,7 +77,8 @@ dataFlow(destStream, [
   'destKeys',
   'streamsMargin',
   'showStreamLabels',
-  'colorScale'
+  'colorScale',
+  'zoomExtent'
 ]);
 
 dataFlow('timeTicksYExtent', (srcStreamBox, destStreamBox) => ({
