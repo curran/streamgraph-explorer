@@ -25,7 +25,8 @@ const StreamGraph = (selection, props) => {
     keys,
     onAreaClick,
     title,
-    margin
+    margin,
+    showLabels
   } = props;
 
   const innerWidth = box.width - margin.right - margin.left;
@@ -74,8 +75,10 @@ const StreamGraph = (selection, props) => {
       .text(d => d.key);
 
   // Add the labels on top of the areas.
+  const labelsData = showLabels ? stacked : [];
   const labels = selection
-    .selectAll('.streamgraph-area-label').data(stacked);
+    .selectAll('.streamgraph-area-label')
+    .data(labelsData);
   const labelsEnter = labels
     .enter().append('text')
       .attr('class', 'streamgraph-area-label');

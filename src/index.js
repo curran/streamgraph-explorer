@@ -43,14 +43,37 @@ dataFlow(box => {
 }, 'containerBox');
 
 // Render the source and destination StreamGraphs.
-const stream = (title, g, onAreaClick) => (box, data, keys, margin) => {
-  g.attr('transform', `translate(${box.x},${box.y})`)
-    .call(StreamGraph, { box, data, keys, onAreaClick, title, margin });
+const stream = (title, g, onAreaClick) => {
+  return (box, data, keys, margin, showLabels) => {
+    g.attr('transform', `translate(${box.x},${box.y})`)
+      .call(StreamGraph, {
+        box,
+        data,
+        keys,
+        onAreaClick,
+        title,
+        margin,
+        showLabels
+      });
+  };
 };
 const srcStream = stream('Origin', srcStreamG, dataFlow.src);
+dataFlow(srcStream, [
+  'srcStreamBox',
+  'srcStreamData',
+  'srcKeys',
+  'streamsMargin',
+  'showStreamLabels'
+]);
+
 const destStream = stream('Destination', destStreamG, dataFlow.dest);
-dataFlow(srcStream, 'srcStreamBox, srcStreamData, srcKeys, streamsMargin');
-dataFlow(destStream, 'destStreamBox, destStreamData, destKeys, streamsMargin');
+dataFlow(destStream, [
+  'destStreamBox',
+  'destStreamData',
+  'destKeys',
+  'streamsMargin',
+  'showStreamLabels'
+]);
 
 dataFlow('timeTicksYExtent', (srcStreamBox, destStreamBox) => ({
     y1: srcStreamBox.y,
@@ -72,8 +95,8 @@ dataFlow((box, data, timeExtent) => {
       box,
       data,
       timeExtent,
-      onBrush: (extent) => {
-        dataFlow.zoomExtent(extent);
-      }
+      onBrush: dataFlow.zoomExtent,
+      onBrushStart: () => dataFlow.showStreamLabels(false),
+      onBrushEnd: () => dataFlow.showStreamLabels(true)
     });
 }, 'contextStreamBox, dataByYear, timeExtent');

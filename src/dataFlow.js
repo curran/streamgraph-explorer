@@ -26,6 +26,7 @@ dataFlow
   ('allYears') // The array of all years as Date objects.
   ('timeExtent') // The full extent of time from the data.
   ('zoomExtent') // The time extent of the zoomed region.
+  ('showStreamLabels', true) // Boolean, should we render the labels or not.
 ;
 
 // Reactive functions.

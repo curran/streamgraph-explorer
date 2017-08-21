@@ -23,6 +23,8 @@ const ContextStream = (selection, props) => {
     box: { width, height },
     data,
     onBrush,
+    onBrushStart,
+    onBrushEnd,
     timeExtent
   } = props;
 
@@ -48,10 +50,12 @@ const ContextStream = (selection, props) => {
 
   // Set up the brush.
   contextBrush
+    .on('start', onBrushStart)
     .on('brush', () => {
       onBrush(event.selection.map(xScale.invert));
     })
     .on('end', () => {
+      onBrushEnd();
       if (!event.selection) {
         // Reset the zoom region to all years
         // when the brush is cleared.
