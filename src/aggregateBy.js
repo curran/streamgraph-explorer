@@ -14,4 +14,13 @@ export const aggregateBy = column => {
 const computeByYears = nest()
   .key(d => d.year)
   .rollup(values => sum(values, d => d.value));
-export const aggregateByYears = computeByYears.entries;
+export const aggregateByYears = (data) => {
+  const entries = computeByYears.entries(data);
+
+  // Parse years (keys here) into Date objects.
+  entries.forEach(entry => {
+    entry.date = new Date(entry.key);
+  });
+
+  return entries;
+};

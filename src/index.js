@@ -3,6 +3,7 @@ import { select } from 'd3-selection';
 import dataFlow from './dataFlow';
 import layout from './layout';
 import StreamGraph from './streamGraph';
+import ContextStream from './contextStream';
 import TimePanel from './timePanel';
 
 // Load the data into the data flow graph.
