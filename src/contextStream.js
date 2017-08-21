@@ -1,3 +1,4 @@
+import { event } from 'd3-selection';
 import { area, curveBasis } from 'd3-shape';
 import { scaleTime, scaleLinear } from 'd3-scale';
 import { min, max, extent, range } from 'd3-array';
@@ -15,15 +16,13 @@ const contextArea = area()
   .y1(d => yScale.range()[1] + yScale(yValue(d)))
   .curve(curveBasis);
 
-const contextBrush = brushX()
-  .on('brush', () => {
-    console.log('brush happened');
-  });
+const contextBrush = brushX();
 
 const ContextStream = (selection, props) => {
   const {
     box: { width, height },
     data,
+    onBrush
   } = props;
 
   xScale
@@ -47,6 +46,17 @@ const ContextStream = (selection, props) => {
   paths.exit().remove();
 
   // Set up the brush.
+  contextBrush
+    .on('brush', () => {
+      onBrush(event.selection.map(xScale.invert));
+    })
+    .on('end', () => {
+      if (!event.selection) {
+        // Reset the zoom region to all years
+        // when the brush is cleared.
+        onBrush(xScale.domain());
+      }
+    });
   const brushG = selection
     .selectAll('.brush').data([null]);
   brushG

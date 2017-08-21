@@ -31,7 +31,10 @@ const StreamGraph = (selection, props) => {
   const innerWidth = box.width - margin.right - margin.left;
   const innerHeight = box.height - margin.top - margin.bottom;
 
-  const stacked = streamStack.keys(keys)(data);
+  let stacked = streamStack.keys(keys)(data);
+  if(data.length < 2) {
+    stacked = [];
+  }
 
   xScale
     .domain(extent(data, xValue))
@@ -79,7 +82,7 @@ const StreamGraph = (selection, props) => {
   labelsEnter
     .merge(labels)
       .text(d => d.key)
-      .attr('transform', streamLabel)
+      .attr('transform', streamLabel);
   labels.exit().remove();
 
   // Add the title.

@@ -1,4 +1,5 @@
 import { json } from 'd3-request';
+import { extent } from 'd3-array';
 import { select } from 'd3-selection';
 import dataFlow from './dataFlow';
 import layout from './layout';
@@ -7,7 +8,21 @@ import ContextStream from './contextStream';
 import TimePanel from './timePanel';
 
 // Load the data into the data flow graph.
-json('data/time_series.json', dataFlow.packedData);
+json('data/time_series.json', (packedData) => {
+
+  // Compute the array of all years covered by the data (Date objects).
+  const allYears = Object
+    .keys(packedData.nested)
+    .map(yearStr => new Date(yearStr));
+
+  // Compute the extent of time.
+  const timeExtent = extent(allYears);
+
+  dataFlow.packedData(packedData);
+  dataFlow.allYears(allYears);
+  dataFlow.timeExtent(timeExtent);
+  dataFlow.zoomExtent(timeExtent);
+});
 
 // Select the div that will contain everything.
 const container = document.getElementById('container');
@@ -45,7 +60,7 @@ dataFlow('timeTicksYExtent', (srcStreamBox, destStreamBox) => ({
 dataFlow(TimePanel(timePanelG), [
   'timePanelBox',
   'streamsMargin',
-  'timeExtent',
+  'zoomExtent',
   'timeTicksYExtent'
 ]);
 
@@ -53,5 +68,11 @@ dataFlow(TimePanel(timePanelG), [
 dataFlow((box, data) => {
   contextStreamG
     .attr('transform', `translate(${box.x},${box.y})`)
-    .call(ContextStream, { box, data });
+    .call(ContextStream, {
+      box,
+      data,
+      onBrush: (extent) => {
+        dataFlow.zoomExtent(extent);
+      }
+    });
 }, 'contextStreamBox, dataByYear');
