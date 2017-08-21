@@ -72,6 +72,6 @@ dataFlow('destStreamData', zoomFilter, 'destStreamDataAllYears, zoomExtent');
 
 // Initialize the routing system that uses URL hash
 // to store pieces of the state.
-hashRouting(dataFlow, ['src', 'dest']);
+hashRouting(dataFlow, ['src', 'dest', 'zoomExtent']);
 
 export default dataFlow;

@@ -21,7 +21,13 @@ json('data/time_series.json', (packedData) => {
   dataFlow.packedData(packedData);
   dataFlow.allYears(allYears);
   dataFlow.timeExtent(timeExtent);
-  dataFlow.zoomExtent(timeExtent);
+
+  // If the zoom extent has not been set from the URL hash,
+  if (!dataFlow.zoomExtent()) {
+
+    // then set it from the data.
+    dataFlow.zoomExtent(timeExtent);
+  }
 });
 
 // Select the div that will contain everything.
