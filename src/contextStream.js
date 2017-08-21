@@ -1,6 +1,7 @@
 import { area, curveBasis } from 'd3-shape';
 import { scaleTime, scaleLinear } from 'd3-scale';
 import { min, max, extent, range } from 'd3-array';
+import { brushX } from 'd3-brush';
 
 const xValue = d => d.date;
 const yValue = d => d.value;
@@ -13,6 +14,11 @@ const contextArea = area()
   .y0(d => yScale.range()[1] - yScale(yValue(d)))
   .y1(d => yScale.range()[1] + yScale(yValue(d)))
   .curve(curveBasis);
+
+const contextBrush = brushX()
+  .on('brush', () => {
+    console.log('brush happened');
+  });
 
 const ContextStream = (selection, props) => {
   const {
@@ -39,6 +45,15 @@ const ContextStream = (selection, props) => {
       .attr('fill', 'black') // TODO make this configurable
       .attr('d', contextArea)
   paths.exit().remove();
+
+  // Set up the brush.
+  const brushG = selection
+    .selectAll('.brush').data([null]);
+  brushG
+    .enter().append('g')
+      .attr('class', 'brush')
+    .merge(brushG)
+      .call(contextBrush);
 };
 
 export default ContextStream;
