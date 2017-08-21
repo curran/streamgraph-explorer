@@ -2,16 +2,18 @@ import { bisector } from 'd3-array';
 
 const bisectDate = bisector(d => d.date).left;
 
+// This function doesn't actually perform any interpolation.
+// It returns zero if the value is not defined in the data.
 const interpolateValue = (values, date) => {
-  const i = bisectDate(values, date);
-  if (i > 0 && i < values.length) {
-    const a = values[i - 1];
-    const b = values[i];
-    const t = (date - a.date) / (b.date - a.date);
-    return a.value * (1 - t) + b.value * t;
+  const i = bisectDate(values, date, 0, values.length - 1);
+  const closestDatum = values[i];
+
+  // If a value for the desired date is not present in the data,
+  if (date.getTime() !== closestDatum.date.getTime()) {
+    return 0;
   }
-  // TODO consider carefully on how to handle edge cases
-  return 0;// values[i].value;
+
+  return closestDatum.value;
 };
 
 // Interpolate values, create data structure for d3.stack.

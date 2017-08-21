@@ -1,7 +1,8 @@
 import { extent } from 'd3-array';
+import { scaleOrdinal, schemeCategory10 } from 'd3-scale';
 import ReactiveModel from 'reactive-model';
 import unpackData from './unpackData';
-import aggregateBy from './aggregateBy';
+import { aggregateBy, aggregateByYears } from './aggregateBy';
 import interpolate from './interpolate';
 import keys from './keys';
 import hashRouting from './hashRouting';
@@ -15,6 +16,7 @@ dataFlow
   ('srcStreamBox') // Position and dimensions of the source StreamGraph.
   ('destStreamBox') // Position and dimensions of the destination StreamGraph.
   ('timePanelBox') // Position and dimensions of the time panel.
+  ('contextStreamBox') // Position and dimensions of the context panel.
   ('src', null) // The currently selected source (null means no selection).
   ('dest', null) // The currently selected destination (null means no selection).
   ('maxStreamLayers', 50) // The maximum number of layers in a StreamGraph.
@@ -22,21 +24,18 @@ dataFlow
   ('streamsMargin', { // The margin of the StreamGraphs and TimePanel.
     top: 0, bottom: 0, left: 20, right: 20
   })
+  ('allYears') // The array of all years as Date objects.
+  ('timeExtent') // The full extent of time from the data.
+  ('zoomExtent') // The time extent of the zoomed region.
+  ('showStreamLabels', true) // Boolean, should we render the labels or not.
+  ('colorScale', scaleOrdinal()
+    .range(schemeCategory10)) // The color scale for StreamGraphs.
 ;
 
 // Reactive functions.
 dataFlow('data', unpackData, 'packedData');
 
-// Compute the array of all years covered by the data (Date objects).
-dataFlow('allYears', packedData => {
-  return Object.keys(packedData.nested)
-    .map(yearStr => new Date(yearStr));
-}, 'packedData');
-
-// Compute the extent of time.
-dataFlow('timeExtent', allYears => extent(allYears), 'allYears');
-
-// TODO filter by selected types, selected origin, and selected destination
+// TODO filter by selected types
 dataFlow('dataFiltered', (data, src, dest) => {
   data = src ? data.filter(d => d.src === src) : data;
   return dest ? data.filter(d => d.dest === dest) : data;
@@ -46,13 +45,27 @@ dataFlow('dataFiltered', (data, src, dest) => {
 dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
 dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
 
+//dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
+
+// Compute data for context panel, aggregated by only time.
+dataFlow('dataByYear', aggregateByYears, 'dataFiltered');
+
 // Compute keys, top N (maxStreamLayers) sorted by max value.
 dataFlow('srcKeys', keys, 'dataBySrc, maxStreamLayers, minStreamMax');
 dataFlow('destKeys', keys, 'dataByDest, maxStreamLayers, minStreamMax');
 
 // Interpolate the aggregated data so there are values for all years.
-dataFlow('srcStreamData', interpolate, 'allYears, dataBySrc');
-dataFlow('destStreamData', interpolate, 'allYears, dataByDest');
+dataFlow('srcStreamDataAllYears', interpolate, 'allYears, dataBySrc');
+dataFlow('destStreamDataAllYears', interpolate, 'allYears, dataByDest');
+
+// Compute the data filtered by zoomed region.
+const zoomFilter = (data, zoomExtent) => {
+  const min = zoomExtent[0];
+  const max = zoomExtent[1];
+  return data.filter(d => d.date > min && d.date < max);
+};
+dataFlow('srcStreamData', zoomFilter, 'srcStreamDataAllYears, zoomExtent');
+dataFlow('destStreamData', zoomFilter, 'destStreamDataAllYears, zoomExtent');
 
 // Initialize the routing system that uses URL hash
 // to store pieces of the state.

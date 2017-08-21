@@ -1,12 +1,11 @@
 import { area, curveBasis, stack, stackOffsetWiggle, stackOrderInsideOut } from 'd3-shape';
-import { scaleTime, scaleLinear, scaleOrdinal, schemeCategory10 } from 'd3-scale';
+import { scaleTime, scaleLinear } from 'd3-scale';
 import { min, max, extent, range } from 'd3-array';
 import { areaLabel } from 'd3-area-label';
 
 const xValue = d => d.date;
 const xScale = scaleTime();
 const yScale = scaleLinear();
-const colorScale = scaleOrdinal().range(schemeCategory10);
 const streamStack = stack().offset(stackOffsetWiggle).order(stackOrderInsideOut);
 
 const streamArea = area()
@@ -25,16 +24,22 @@ const StreamGraph = (selection, props) => {
     keys,
     onAreaClick,
     title,
-    margin
+    margin,
+    showLabels,
+    colorScale,
+    zoomExtent
   } = props;
 
   const innerWidth = box.width - margin.right - margin.left;
   const innerHeight = box.height - margin.top - margin.bottom;
 
-  const stacked = streamStack.keys(keys)(data);
+  let stacked = streamStack.keys(keys)(data);
+  if(data.length < 2) {
+    stacked = [];
+  }
 
   xScale
-    .domain(extent(data, xValue))
+    .domain(zoomExtent)
     .range([0, innerWidth]);
 
   yScale
@@ -43,8 +48,6 @@ const StreamGraph = (selection, props) => {
       max(stacked, series => max(series, d => d[1]))
     ])
     .range([innerHeight, 0]);
-
-  colorScale.domain(range(keys.length));
 
   const translateX = box.x + margin.left;
   const translateY = box.y + margin.top;
@@ -59,8 +62,8 @@ const StreamGraph = (selection, props) => {
       .attr('class', 'streamgraph-area');
   pathsEnter
     .merge(paths)
-      .attr('fill', d => colorScale(d.index))
-      .attr('stroke', d => colorScale(d.index))
+      .attr('fill', d => colorScale(d.key))
+      .attr('stroke', d => colorScale(d.key))
       .attr('d', streamArea)
       .on('click', d => onAreaClick(stacked.length === 1 ? null : d.key));
   paths.exit().remove();
@@ -71,15 +74,17 @@ const StreamGraph = (selection, props) => {
       .text(d => d.key);
 
   // Add the labels on top of the areas.
+  const labelsData = showLabels ? stacked : [];
   const labels = selection
-    .selectAll('.streamgraph-area-label').data(stacked);
+    .selectAll('.streamgraph-area-label')
+    .data(labelsData);
   const labelsEnter = labels
     .enter().append('text')
       .attr('class', 'streamgraph-area-label');
   labelsEnter
     .merge(labels)
       .text(d => d.key)
-      .attr('transform', streamLabel)
+      .attr('transform', streamLabel);
   labels.exit().remove();
 
   // Add the title.

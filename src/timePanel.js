@@ -21,7 +21,6 @@ const TimePanel = g => (box, margin, timeExtent, ticksYExtent) => {
       .attr('transform', `translate(${translateX},${translateY})`)
       .call(xAxis);
   g.select('.domain').remove();
-  console.log(translateY);
   g.selectAll('.tick line')
       .attr('y1', ticksYExtent.y1 - translateY)
       .attr('y2', ticksYExtent.y2 - translateY);
