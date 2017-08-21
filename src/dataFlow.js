@@ -65,7 +65,7 @@ dataFlow('destStreamDataAllYears', interpolate, 'allYears, dataByDest');
 const zoomFilter = (data, zoomExtent) => {
   const min = zoomExtent[0];
   const max = zoomExtent[1];
-  return data.filter(d => d.date > min && d.date < max);
+  return data.filter(d => d.date >= min && d.date <= max);
 };
 dataFlow('srcStreamData', zoomFilter, 'srcStreamDataAllYears, zoomExtent');
 dataFlow('destStreamData', zoomFilter, 'destStreamDataAllYears, zoomExtent');

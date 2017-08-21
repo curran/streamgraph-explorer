@@ -1,9 +1,9 @@
-import { timeFormat, timeParse } from 'd3-time-format';
+import { utcFormat, utcParse } from 'd3-time-format';
 import queryString from 'query-string';
 
 const zoomFormatStr = '%Y';
-const zoomFormat = timeFormat(zoomFormatStr);
-const zoomParse = timeParse(zoomFormatStr);
+const zoomFormat = utcFormat(zoomFormatStr);
+const zoomParse = utcParse(zoomFormatStr);
 const zoomSplitStr = '-';
 
 const encodeZoom = zoomExtent => {
