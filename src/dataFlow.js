@@ -1,4 +1,5 @@
 import { extent } from 'd3-array';
+import { scaleOrdinal, schemeCategory10 } from 'd3-scale';
 import ReactiveModel from 'reactive-model';
 import unpackData from './unpackData';
 import { aggregateBy, aggregateByYears } from './aggregateBy';
@@ -27,6 +28,8 @@ dataFlow
   ('timeExtent') // The full extent of time from the data.
   ('zoomExtent') // The time extent of the zoomed region.
   ('showStreamLabels', true) // Boolean, should we render the labels or not.
+  ('colorScale', scaleOrdinal()
+    .range(schemeCategory10)) // The color scale for StreamGraphs.
 ;
 
 // Reactive functions.

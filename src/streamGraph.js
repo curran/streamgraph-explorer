@@ -1,12 +1,11 @@
 import { area, curveBasis, stack, stackOffsetWiggle, stackOrderInsideOut } from 'd3-shape';
-import { scaleTime, scaleLinear, scaleOrdinal, schemeCategory10 } from 'd3-scale';
+import { scaleTime, scaleLinear } from 'd3-scale';
 import { min, max, extent, range } from 'd3-array';
 import { areaLabel } from 'd3-area-label';
 
 const xValue = d => d.date;
 const xScale = scaleTime();
 const yScale = scaleLinear();
-const colorScale = scaleOrdinal().range(schemeCategory10);
 const streamStack = stack().offset(stackOffsetWiggle).order(stackOrderInsideOut);
 
 const streamArea = area()
@@ -26,7 +25,8 @@ const StreamGraph = (selection, props) => {
     onAreaClick,
     title,
     margin,
-    showLabels
+    showLabels,
+    colorScale
   } = props;
 
   const innerWidth = box.width - margin.right - margin.left;
@@ -48,8 +48,6 @@ const StreamGraph = (selection, props) => {
     ])
     .range([innerHeight, 0]);
 
-  colorScale.domain(range(keys.length));
-
   const translateX = box.x + margin.left;
   const translateY = box.y + margin.top;
   selection
@@ -63,8 +61,8 @@ const StreamGraph = (selection, props) => {
       .attr('class', 'streamgraph-area');
   pathsEnter
     .merge(paths)
-      .attr('fill', d => colorScale(d.index))
-      .attr('stroke', d => colorScale(d.index))
+      .attr('fill', d => colorScale(d.key))
+      .attr('stroke', d => colorScale(d.key))
       .attr('d', streamArea)
       .on('click', d => onAreaClick(stacked.length === 1 ? null : d.key));
   paths.exit().remove();
