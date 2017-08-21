@@ -1,7 +1,7 @@
 import { extent } from 'd3-array';
 import ReactiveModel from 'reactive-model';
 import unpackData from './unpackData';
-import aggregateBy from './aggregateBy';
+import { aggregateBy, aggregateByYears } from './aggregateBy';
 import interpolate from './interpolate';
 import keys from './keys';
 import hashRouting from './hashRouting';
@@ -15,6 +15,7 @@ dataFlow
   ('srcStreamBox') // Position and dimensions of the source StreamGraph.
   ('destStreamBox') // Position and dimensions of the destination StreamGraph.
   ('timePanelBox') // Position and dimensions of the time panel.
+  ('contextStreamBox') // Position and dimensions of the context panel.
   ('src', null) // The currently selected source (null means no selection).
   ('dest', null) // The currently selected destination (null means no selection).
   ('maxStreamLayers', 50) // The maximum number of layers in a StreamGraph.
@@ -45,6 +46,9 @@ dataFlow('dataFiltered', (data, src, dest) => {
 // Compute aggregated data by source and destination (after filtering).
 dataFlow('dataBySrc', aggregateBy('src'), 'dataFiltered');
 dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
+
+// Compute data for context panel, aggregated by only time.
+dataFlow('dataByYear', aggregateByYears, 'dataFiltered');
 
 // Compute keys, top N (maxStreamLayers) sorted by max value.
 dataFlow('srcKeys', keys, 'dataBySrc, maxStreamLayers, minStreamMax');

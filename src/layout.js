@@ -6,14 +6,16 @@ const arrangement = {
   children: [
     'srcStream',
     'timePanel',
-    'destStream'
+    'destStream',
+    'contextStream'
   ]
 };
 
 // The relative size of each component.
 // If no size specified, defaults to 1.
 const sizes = {
-  timePanel: { size: 0.2 }
+  timePanel: { size: 0.2 },
+  contextStream: { size: 0.2 }
 };
 
 // Set up the layout that responds to resize.
