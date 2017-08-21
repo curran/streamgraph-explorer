@@ -44,7 +44,7 @@ const ContextStream = (selection, props) => {
       .attr('class', 'context-panel-area');
   pathsEnter
     .merge(paths)
-      .attr('fill', 'black') // TODO make this configurable
+      .attr('fill', 'gray') // TODO make this configurable
       .attr('d', contextArea)
   paths.exit().remove();
 
