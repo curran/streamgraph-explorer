@@ -105,4 +105,4 @@ dataFlow((box, data, timeExtent) => {
       onBrushStart: () => dataFlow.showStreamLabels(false),
       onBrushEnd: () => dataFlow.showStreamLabels(true)
     });
-}, 'contextStreamBox, dataByYear, timeExtent');
+}, 'contextStreamBox, contextStreamData, timeExtent');

@@ -3,7 +3,7 @@ import { scaleOrdinal, schemeCategory10 } from 'd3-scale';
 import ReactiveModel from 'reactive-model';
 import unpackData from './unpackData';
 import { aggregateBy, aggregateByYears } from './aggregateBy';
-import interpolate from './interpolate';
+import { interpolate, interpolateTotals } from './interpolate';
 import keys from './keys';
 import hashRouting from './hashRouting';
 
@@ -49,6 +49,9 @@ dataFlow('dataByDest', aggregateBy('dest'), 'dataFiltered');
 
 // Compute data for context panel, aggregated by only time.
 dataFlow('dataByYear', aggregateByYears, 'dataFiltered');
+
+// Fill in zero values so we have a curve that matches the stream shape.
+dataFlow('contextStreamData', interpolateTotals, 'allYears, dataByYear');
 
 // Compute keys, top N (maxStreamLayers) sorted by max value.
 dataFlow('srcKeys', keys, 'dataBySrc, maxStreamLayers, minStreamMax');

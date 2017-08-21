@@ -17,7 +17,7 @@ const interpolateValue = (values, date) => {
 };
 
 // Interpolate values, create data structure for d3.stack.
-const interpolate = (years, nestedData) => {
+export const interpolate = (years, nestedData) => {
 
   // Parse dates.
   nestedData.forEach(d => {
@@ -42,4 +42,16 @@ const interpolate = (years, nestedData) => {
   });
 };
 
-export default interpolate;
+export const interpolateTotals = (years, data) => {
+  return years.map(date => {
+
+    // Create a new row object with the date.
+    const row = { date };
+
+    data.forEach(d => {
+      row.value = interpolateValue(data, date);
+    });
+
+    return row;
+  });
+};
